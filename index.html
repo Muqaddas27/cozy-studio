@@ -1,0 +1,150 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>COZY STUDIO | High-End Interior Design</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            champagne: '#FDFCFB',
+            sage: '#5F6F52',
+            charcoal: '#2C2C2C',
+          }
+        }
+      }
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Inter:wght@300;400;500;600;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles/animations.css">
+  <style>
+    :root {
+      --champagne: #FDFCFB;
+      --sage: #5F6F52;
+      --charcoal: #2C2C2C;
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--champagne);
+      color: var(--charcoal);
+      scroll-behavior: smooth;
+      overflow-x: hidden;
+    }
+    h1, h2, h3, h4, .serif {
+      font-family: 'Cormorant Garamond', serif;
+    }
+    .text-sage { color: var(--sage); }
+    .bg-sage { background-color: var(--sage); }
+    .bg-champagne { background-color: var(--champagne); }
+    .text-charcoal { color: var(--charcoal); }
+    .bg-charcoal { background-color: var(--charcoal); }
+    
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-reveal {
+      animation: fadeInUp 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @keyframes slowZoom {
+      from { transform: scale(1); }
+      to { transform: scale(1.15); }
+    }
+    .animate-slow-zoom {
+      animation: slowZoom 30s ease-out forwards;
+    }
+
+    @keyframes shimmer {
+      0% { background-position: -1000px 0; }
+      100% { background-position: 1000px 0; }
+    }
+
+    ::selection {
+      background-color: var(--sage);
+      color: white;
+    }
+
+    /* Smooth transitions */
+    * {
+      transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+      transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: var(--champagne);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: linear-gradient(to bottom, #D1D5DB, var(--sage));
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--sage);
+    }
+  </style>
+<script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@^19.2.4",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
+    "react/": "https://esm.sh/react@^19.2.4/",
+    "lucide-react": "https://esm.sh/lucide-react@^0.574.0"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+<body>
+  <div id="root"></div>
+<script type="module" src="/index.tsx"></script>
+<script>
+  // Scroll Reveal Animation
+  const observerOptions = {
+    threshold: 0.1,
+    rootMargin: '0px 0px -100px 0px'
+  };
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('revealed');
+        // Once revealed, stop observing
+        observer.unobserve(entry.target);
+      }
+    });
+  }, observerOptions);
+
+  // Observe all scroll-reveal elements
+  const observeScrollElements = () => {
+    const scrollRevealElements = document.querySelectorAll('.scroll-reveal, .scroll-reveal-left, .scroll-reveal-right, .scroll-reveal-scale, .stagger-children');
+    scrollRevealElements.forEach(el => observer.observe(el));
+  };
+
+  // Initial observation
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', observeScrollElements);
+  } else {
+    observeScrollElements();
+  }
+
+  // Re-observe when DOM changes (for React re-renders)
+  const mutationObserver = new MutationObserver(() => {
+    observeScrollElements();
+  });
+
+  mutationObserver.observe(document.body, {
+    childList: true,
+    subtree: true
+  });
+</script>
+</body>
+</html>

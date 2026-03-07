@@ -37,10 +37,10 @@ const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate }) => {
   
   // High-Contrast Styles
   const navbarClasses = isScrolled 
-    ? 'bg-white/95 backdrop-blur-xl text-charcoal py-4 shadow-[0_10px_40px_rgba(0,0,0,0.1)] border-b-2 border-sage/20 glass-effect-dark' 
+    ? 'bg-white/95 backdrop-blur-xl text-charcoal py-6 shadow-[0_10px_40px_rgba(0,0,0,0.1)] border-b-2 border-sage/20 glass-effect-dark' 
     : isHome 
-      ? 'bg-transparent text-white py-10' 
-      : 'bg-white text-charcoal py-8 border-b-2 border-gray-100';
+      ? 'bg-transparent text-white py-6' 
+      : 'bg-white text-charcoal py-6 border-b-2 border-gray-100';
 
   const btnClasses = isScrolled || !isHome
     ? 'bg-gradient-to-r from-charcoal to-charcoal hover:from-sage hover:to-sage text-white ripple-effect magnetic-button hover-glow'
@@ -48,46 +48,64 @@ const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate }) => {
 
   return (
     <nav className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-700 ${navbarClasses}`}>
-      <div className="max-w-[1440px] mx-auto px-8 md:px-16 flex justify-between items-center">
-        <div 
-          className="flex items-center cursor-pointer group"
-          onClick={() => handleNavClick(Page.HOME)}
-        >
-          <span className="text-2xl font-bold tracking-[0.5em] serif select-none group-hover:text-sage transition-colors">
-            COZY STUDIO
-          </span>
-        </div>
+      <div className="max-w-[1440px] mx-auto px-6 md:px-16 relative">
+        {/* Desktop Layout: fixed left/right rails with truly centered nav */}
+        <div className="hidden lg:flex items-center justify-center relative">
+          <button
+            type="button"
+            className="absolute left-0 flex items-center cursor-pointer group"
+            onClick={() => handleNavClick(Page.HOME)}
+          >
+            <span className="text-2xl font-bold tracking-[0.5em] serif select-none group-hover:text-sage transition-colors">
+              COZY STUDIO
+            </span>
+          </button>
 
-        {/* Desktop Links */}
-        <div className="hidden md:flex items-center space-x-16">
-          {navItems.map((item) => (
-            <button
-              key={item.value}
-              onClick={() => handleNavClick(item.value)}
-              className={`text-[10px] uppercase tracking-[0.4em] font-black transition-all relative group py-2 underline-expand ${
-                currentPage === item.value 
-                  ? 'text-sage opacity-100' 
-                  : 'opacity-60 hover:opacity-100 hover:text-sage'
-              }`}
-            >
-              {item.label}
-            </button>
-          ))}
+          <div className="flex items-center space-x-16">
+            {navItems.map((item) => (
+              <button
+                key={item.value}
+                onClick={() => handleNavClick(item.value)}
+                className={`text-[10px] uppercase tracking-[0.4em] font-black transition-all relative group py-2 underline-expand ${
+                  currentPage === item.value 
+                    ? 'text-sage opacity-100' 
+                    : 'opacity-60 hover:opacity-100 hover:text-sage'
+                }`}
+              >
+                {item.label}
+              </button>
+            ))}
+          </div>
+
           <button 
+            type="button"
             onClick={() => setIsContactModalOpen(true)}
-            className={`px-12 py-4 text-[10px] uppercase tracking-[0.4em] font-black transition-all duration-500 shadow-lg hover:shadow-xl hover:scale-105 transform ${btnClasses}`}
+            className={`absolute right-0 px-12 py-4 text-[10px] uppercase tracking-[0.4em] font-black transition-all duration-500 shadow-lg hover:shadow-xl hover:scale-105 transform ${btnClasses}`}
           >
             Inquiry
           </button>
         </div>
 
-        {/* Mobile Toggle */}
-        <button 
-          className="md:hidden p-3"
-          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-        >
-          {isMobileMenuOpen ? <X size={32} /> : <Menu size={32} />}
-        </button>
+        {/* Mobile / Tablet Layout */}
+        <div className="lg:hidden flex items-center justify-between">
+          <button
+            type="button"
+            className="flex items-center cursor-pointer group text-left"
+            onClick={() => handleNavClick(Page.HOME)}
+          >
+            <span className="text-lg sm:text-xl font-bold tracking-[0.35em] sm:tracking-[0.45em] serif select-none group-hover:text-sage transition-colors">
+              COZY STUDIO
+            </span>
+          </button>
+
+          <button 
+            className="p-3"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            aria-label="Toggle menu"
+          >
+            {isMobileMenuOpen ? <X size={30} /> : <Menu size={30} />}
+          </button>
+        </div>
       </div>
 
       {/* Full-Screen Mobile Menu */}

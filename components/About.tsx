@@ -1,5 +1,6 @@
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { X, Mail, Linkedin, Award, Briefcase, Home, Palette, ShoppingBag, Layers } from 'lucide-react';
 
 interface TeamMember {
@@ -258,85 +259,111 @@ const TeamCard: React.FC<{ member: TeamMember; onClick: () => void }> = ({ membe
   </div>
 );
 
-const TeamMemberModal: React.FC<{ member: TeamMember; onClose: () => void }> = ({ member, onClose }) => (
-  <div className="fixed inset-0 bg-charcoal/90 backdrop-blur-sm z-[200] flex items-center justify-center p-6 animate-in fade-in duration-300" onClick={onClose}>
-    <div className="bg-white max-w-4xl w-full max-h-[90vh] overflow-y-auto relative animate-in zoom-in duration-300" onClick={(e) => e.stopPropagation()}>
-      <button 
-        onClick={onClose}
-        className="absolute top-6 right-6 w-12 h-12 bg-charcoal text-white hover:bg-sage transition-colors flex items-center justify-center z-10"
-      >
-        <X size={24} />
-      </button>
-      
-      <div className="grid grid-cols-1 md:grid-cols-2">
-        {/* Image Section */}
-        <div className="relative aspect-[4/5] md:aspect-auto">
-          <img 
-            src={member.img} 
-            className="w-full h-full object-cover" 
-            alt={member.name}
-            onError={(e) => { e.currentTarget.src = 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=800'; }}
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-charcoal/60 via-transparent to-transparent"></div>
-        </div>
+const TeamMemberModal: React.FC<{ member: TeamMember; onClose: () => void }> = ({ member, onClose }) => {
+  useEffect(() => {
+    const { body, documentElement } = document;
+    const previousOverflow = body.style.overflow;
+    const previousPaddingRight = body.style.paddingRight;
+    const scrollbarWidth = window.innerWidth - documentElement.clientWidth;
 
-        {/* Content Section */}
-        <div className="p-12 md:p-16 space-y-8">
-          <div>
-            <h2 className="text-5xl font-bold serif text-charcoal mb-4 leading-tight">{member.name}</h2>
-            <p className="text-sage text-sm uppercase tracking-[0.4em] font-black mb-6">{member.role}</p>
+    body.style.overflow = 'hidden';
+    if (scrollbarWidth > 0) {
+      body.style.paddingRight = `${scrollbarWidth}px`;
+    }
+
+    return () => {
+      body.style.overflow = previousOverflow;
+      body.style.paddingRight = previousPaddingRight;
+    };
+  }, []);
+
+  const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (e.target === e.currentTarget) {
+      onClose();
+    }
+  };
+
+  return createPortal(
+    <div className="fixed inset-0 bg-charcoal/90 backdrop-blur-sm z-[300] flex items-center justify-center p-6 animate-in fade-in duration-300" onClick={handleBackdropClick}>
+      <div className="bg-white max-w-4xl w-full max-h-[90vh] overflow-y-auto relative animate-in zoom-in duration-300 shadow-2xl">
+        <button 
+          onClick={onClose}
+          className="absolute top-6 right-6 w-12 h-12 bg-charcoal text-white hover:bg-sage transition-colors flex items-center justify-center z-10"
+        >
+          <X size={24} />
+        </button>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2">
+          {/* Image Section */}
+          <div className="relative aspect-[4/5] md:aspect-auto">
+            <img 
+              src={member.img} 
+              className="w-full h-full object-cover" 
+              alt={member.name}
+              onError={(e) => { e.currentTarget.src = 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=800'; }}
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-charcoal/60 via-transparent to-transparent"></div>
           </div>
 
-          <div className="border-t-2 border-sage/20 pt-8">
-            <p className="text-lg text-gray-600 font-light leading-relaxed mb-8">
-              {member.bio}
-            </p>
-          </div>
-
-          <div className="space-y-6">
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 bg-sage/10 flex items-center justify-center">
-                <Award className="text-sage" size={24} />
-              </div>
-              <div>
-                <p className="text-xs uppercase tracking-widest text-gray-400 font-black">Experience</p>
-                <p className="text-xl font-bold text-charcoal serif">{member.experience}</p>
-              </div>
+          {/* Content Section */}
+          <div className="p-12 md:p-16 space-y-8">
+            <div>
+              <h2 className="text-5xl font-bold serif text-charcoal mb-4 leading-tight">{member.name}</h2>
+              <p className="text-sage text-sm uppercase tracking-[0.4em] font-black mb-6">{member.role}</p>
             </div>
 
-            <div className="flex items-start gap-4">
-              <div className="w-12 h-12 bg-sage/10 flex items-center justify-center flex-shrink-0 mt-1">
-                <Briefcase className="text-sage" size={24} />
-              </div>
-              <div>
-                <p className="text-xs uppercase tracking-widest text-gray-400 font-black mb-3">Expertise</p>
-                <div className="flex flex-wrap gap-2">
-                  {member.expertise.map((skill, index) => (
-                    <span key={index} className="bg-sage/10 text-sage px-4 py-2 text-xs uppercase tracking-wider font-bold">
-                      {skill}
-                    </span>
-                  ))}
+            <div className="border-t-2 border-sage/20 pt-8">
+              <p className="text-lg text-gray-600 font-light leading-relaxed mb-8">
+                {member.bio}
+              </p>
+            </div>
+
+            <div className="space-y-6">
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 bg-sage/10 flex items-center justify-center">
+                  <Award className="text-sage" size={24} />
+                </div>
+                <div>
+                  <p className="text-xs uppercase tracking-widest text-gray-400 font-black">Experience</p>
+                  <p className="text-xl font-bold text-charcoal serif">{member.experience}</p>
                 </div>
               </div>
-            </div>
 
-            <div className="flex items-center gap-4 pt-6 border-t border-gray-100">
-              <div className="w-12 h-12 bg-sage/10 flex items-center justify-center">
-                <Mail className="text-sage" size={24} />
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 bg-sage/10 flex items-center justify-center flex-shrink-0 mt-1">
+                  <Briefcase className="text-sage" size={24} />
+                </div>
+                <div>
+                  <p className="text-xs uppercase tracking-widest text-gray-400 font-black mb-3">Expertise</p>
+                  <div className="flex flex-wrap gap-2">
+                    {member.expertise.map((skill, index) => (
+                      <span key={index} className="bg-sage/10 text-sage px-4 py-2 text-xs uppercase tracking-wider font-bold">
+                        {skill}
+                      </span>
+                    ))}
+                  </div>
+                </div>
               </div>
-              <div>
-                <p className="text-xs uppercase tracking-widest text-gray-400 font-black">Contact</p>
-                <a href={`mailto:${member.email}`} className="text-lg font-bold text-sage hover:text-charcoal transition-colors">
-                  {member.email}
-                </a>
+
+              <div className="flex items-center gap-4 pt-6 border-t border-gray-100">
+                <div className="w-12 h-12 bg-sage/10 flex items-center justify-center">
+                  <Mail className="text-sage" size={24} />
+                </div>
+                <div>
+                  <p className="text-xs uppercase tracking-widest text-gray-400 font-black">Contact</p>
+                  <a href={`mailto:${member.email}`} className="text-lg font-bold text-sage hover:text-charcoal transition-colors">
+                    {member.email}
+                  </a>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-  </div>
-);
+    </div>,
+    document.body
+  );
+};
 
 const ServiceCard: React.FC<{ icon: React.ReactNode; title: string; description: string; features: string[] }> = ({ icon, title, description, features }) => (
   <div className="group bg-gradient-to-br from-champagne/20 via-white to-white p-12 hover:shadow-2xl transition-all duration-700 border-2 border-transparent hover:border-sage/20 hover-lift spotlight">

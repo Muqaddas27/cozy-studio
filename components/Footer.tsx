@@ -41,8 +41,8 @@ const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
         <div className="grid grid-cols-1 md:grid-cols-12 gap-16 mb-20">
           
           <div className="md:col-span-5">
-            <h2 className="text-3xl font-bold tracking-[0.2em] serif mb-8 text-champagne">COZY STUDIO</h2>
-            <p className="text-gray-400 max-w-sm mb-10 leading-relaxed font-light">
+            <h2 className="text-4xl font-bold tracking-[0.2em] serif mb-8 text-champagne">COZY STUDIO</h2>
+            <p className="text-gray-400 max-w-sm mb-10 leading-relaxed font-light text-base">
               Designing sanctuaries that transcend time. We are a multidisciplinary studio committed to the highest standards of architectural integrity.
             </p>
             <div className="flex gap-6">
@@ -53,7 +53,7 @@ const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
           </div>
 
           <div className="md:col-span-3">
-            <h4 className="text-[11px] uppercase tracking-[0.3em] font-bold text-sage mb-8">Explore</h4>
+            <h4 className="text-sm uppercase tracking-[0.3em] font-bold text-sage mb-8">Explore</h4>
             <ul className="space-y-4">
               <li><FooterLink onClick={() => onNavigate(Page.PROJECTS)}>Portfolio</FooterLink></li>
               <li><FooterLink onClick={() => onNavigate(Page.ABOUT)}>Our Philosophy</FooterLink></li>
@@ -63,8 +63,8 @@ const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
           </div>
 
           <div className="md:col-span-4">
-            <h4 className="text-[11px] uppercase tracking-[0.3em] font-bold text-sage mb-8">Newsletter</h4>
-            <p className="text-gray-400 text-sm mb-6 font-light">Join our list for exclusive interior insights and collection previews.</p>
+            <h4 className="text-sm uppercase tracking-[0.3em] font-bold text-sage mb-8">Newsletter</h4>
+            <p className="text-gray-400 text-base mb-6 font-light leading-relaxed">Join our list for exclusive interior insights and collection previews.</p>
             {submitted ? (
               <div className="text-sage text-sm py-2 animate-in fade-in">✓ Thank you for subscribing!</div>
             ) : (
@@ -76,7 +76,7 @@ const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
-                    className="bg-transparent border-none outline-none w-full text-sm font-light py-2 placeholder:text-gray-600" 
+                    className="bg-transparent border-none outline-none w-full text-base font-light py-2 placeholder:text-gray-600" 
                   />
                   <button type="submit" className="text-sage hover:text-white transition-colors hover:scale-110 transform magnetic-button">
                     <ArrowUp size={20} className="rotate-45" />
@@ -89,10 +89,10 @@ const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
         </div>
 
         <div className="pt-12 border-t-2 border-gradient-to-r from-gray-800 via-sage/20 to-gray-800 flex flex-col md:flex-row justify-between items-center gap-6">
-          <p className="text-[10px] uppercase tracking-widest text-gray-500 font-bold italic">
+          <p className="text-xs uppercase tracking-widest text-gray-500 font-bold italic">
             © 2026 Cozy Living Studio. All rights reserved.
           </p>
-          <div className="flex gap-8 text-[10px] uppercase tracking-widest text-gray-500 font-bold">
+          <div className="flex gap-8 text-xs uppercase tracking-widest text-gray-500 font-bold">
             <button onClick={() => onNavigate(Page.PRIVACY)} className="hover:text-sage transition-colors">Privacy Policy</button>
             <button onClick={() => onNavigate(Page.TERMS)} className="hover:text-sage transition-colors">Terms of Service</button>
           </div>
@@ -105,7 +105,7 @@ const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
 const FooterLink = ({ children, onClick }: { children: React.ReactNode; onClick: () => void }) => (
   <button 
     onClick={onClick}
-    className="text-gray-400 hover:text-sage transition-colors text-sm font-light tracking-wide block w-full text-left hover:translate-x-1 transform duration-300 underline-expand"
+    className="text-gray-400 hover:text-sage transition-colors text-base font-light tracking-wide block w-full text-left hover:translate-x-1 transform duration-300 underline-expand"
   >
     {children}
   </button>

@@ -202,7 +202,7 @@ const About: React.FC = () => {
             <span className="text-xs uppercase tracking-[0.5em] font-bold text-sage mb-6 block">The Collective</span>
             <h2 className="text-6xl md:text-8xl font-bold serif text-charcoal">The Masterminds.</h2>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-16 stagger-children">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 stagger-children">
             {teamMembers.map((member) => (
               <TeamCard 
                 key={member.name}
@@ -241,21 +241,38 @@ const Pillar: React.FC<{ title: string; desc: string }> = ({ title, desc }) => (
 );
 
 const TeamCard: React.FC<{ member: TeamMember; onClick: () => void }> = ({ member, onClick }) => (
-  <div className="group cursor-pointer hover-lift" onClick={onClick}>
-    <div className="aspect-[4/5] overflow-hidden mb-10 shadow-2xl grayscale-[50%] group-hover:grayscale-0 transition-all duration-700 relative shine-effect">
-      <img 
-        src={member.img} 
-        className="w-full h-full object-cover scale-100 group-hover:scale-105 transition-transform duration-[1500ms]" 
+  <div className="group cursor-pointer" onClick={onClick}>
+    {/* Image container */}
+    <div className="relative aspect-[3/4] overflow-hidden shadow-xl">
+      {/* Thin border frame that animates on hover */}
+      <div className="absolute inset-0 border border-white/0 group-hover:border-white/60 transition-all duration-700 z-20 pointer-events-none"></div>
+
+      <img
+        src={member.img}
+        className="w-full h-full object-cover object-top scale-100 group-hover:scale-105 transition-transform duration-[1800ms] ease-out grayscale-[30%] group-hover:grayscale-0"
         alt={member.name}
         onError={(e) => { e.currentTarget.src = 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=800'; }}
       />
-      <div className="absolute inset-0 bg-gradient-to-t from-charcoal/60 via-transparent to-transparent group-hover:from-sage/20 transition-all duration-700"></div>
-      <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-        <span className="bg-white/90 text-charcoal px-8 py-3 text-xs uppercase tracking-[0.4em] font-black backdrop-blur-sm">View Profile</span>
+
+      {/* Persistent bottom gradient so name is always readable */}
+      <div className="absolute inset-0 bg-gradient-to-t from-charcoal/80 via-charcoal/10 to-transparent"></div>
+
+      {/* Name + role always visible at bottom */}
+      <div className="absolute bottom-0 left-0 right-0 p-6 z-10 translate-y-0 group-hover:translate-y-[-6px] transition-transform duration-500">
+        <h3 className="text-2xl font-bold text-white serif leading-tight mb-1">{member.name}</h3>
+        <p className="text-[10px] uppercase tracking-[0.35em] text-white/70 font-black group-hover:text-sage/90 transition-colors duration-300">{member.role}</p>
+      </div>
+
+      {/* "View Profile" pill — slides up on hover */}
+      <div className="absolute inset-0 flex items-center justify-center z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-400">
+        <span className="bg-white text-charcoal px-7 py-2.5 text-[10px] uppercase tracking-[0.45em] font-black shadow-lg translate-y-2 group-hover:translate-y-0 transition-transform duration-500">
+          View Profile
+        </span>
       </div>
     </div>
-    <h3 className="text-3xl font-bold text-charcoal serif mb-2 group-hover:text-sage transition-colors">{member.name}</h3>
-    <p className="text-[11px] uppercase tracking-[0.4em] text-sage font-black opacity-70 group-hover:opacity-100 transition-opacity">{member.role}</p>
+
+    {/* Thin accent line */}
+    <div className="h-[2px] w-0 group-hover:w-full bg-sage transition-all duration-700 ease-out mt-0"></div>
   </div>
 );
 
